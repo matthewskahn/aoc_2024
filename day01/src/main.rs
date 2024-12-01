@@ -1,5 +1,4 @@
-use std::fs::read_to_string;
-use std::path::Path;
+use aoc_utils::read_file;
 use std::vec::Vec;
 
 fn main() {
@@ -50,14 +49,4 @@ fn part2() {
     }
 
     println!("Sum of part 2 is {}", sum);
-}
-
-fn read_file(path: &str) -> Vec<String> {
-    let path = Path::new(&path);
-
-    read_to_string(path)
-        .unwrap()
-        .lines()
-        .map(String::from)
-        .collect()
 }
