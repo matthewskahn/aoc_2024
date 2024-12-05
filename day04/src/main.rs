@@ -45,7 +45,7 @@ fn part2(lines: &Vec<String>) {
 }
 
 fn is_cross_match(u: &str, d: &str, l: &str, r: &str) -> bool {
-    return ((u == "M" && d == "S") || (u == "S" && d == "M")) && ((l == "M" && r == "S") || (l == "S" && r == "M")); 
+    return ((u,d) == ("M","S") || (u,d) == ("S","M")) && ((l,r) == ("M","S") || (l,r) == ("S","M")); 
 }
 
 fn rotate_45(lines: &Vec<String>) -> Vec<String> {
