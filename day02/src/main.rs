@@ -1,12 +1,11 @@
 use aoc_utils::read_file_as;
 fn main() {
-    let lines = read_file_as::<i32>("/home/matt/dev/aoc/2024/day02/input.txt");
+    let lines = read_file_as::<i32>("./input.txt");
     part1(&lines);
     part2(&lines);
 }
 
 fn part1(lines: &Vec<Vec<i32>>) {
-
     let mut safe = 0u32;
 
     for line in lines {
@@ -19,7 +18,6 @@ fn part1(lines: &Vec<Vec<i32>>) {
 }
 
 fn part2(lines: &Vec<Vec<i32>>) {
-    
     let mut safe = 0u32;
 
     for line in lines {
@@ -53,7 +51,7 @@ fn is_safe(report: &Vec<i32>) -> (bool, Option<usize>) {
         }
 
         if !safe {
-            offender = Some(i+1);
+            offender = Some(i + 1);
             break;
         }
     }
@@ -64,7 +62,7 @@ fn is_safe(report: &Vec<i32>) -> (bool, Option<usize>) {
 fn is_dampened_safe(report: &Vec<i32>) -> bool {
     // See if it's safe
     let (mut safe, mut offender) = is_safe(report);
-    
+
     if !safe {
         // Remove the offender and try again
         let mut pruned_copy = report.clone();

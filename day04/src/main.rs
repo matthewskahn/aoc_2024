@@ -2,7 +2,7 @@ use aoc_utils::read_file;
 use regex::Regex;
 
 fn main() {
-    let lines = read_file("/home/matt/dev/aoc/2024/day04/input.txt");
+    let lines = read_file("./input.txt");
 
     part1(&lines);
     part2(&lines);
@@ -29,14 +29,19 @@ fn part1(lines: &Vec<String>) {
 fn part2(lines: &Vec<String>) {
     let mut sum = 0u32;
 
-    for i in 1..lines.len()-1 {
-        for j in 1..lines.len()-1 {
-            if &lines[i][j..j+1] == "A" {
-                let (u, d, l, r) = (&lines[i-1][j-1..j], &lines[i+1][j+1..j+2], &lines[i-1][j+1..j+2], &lines[i+1][j-1..j]);
+    for i in 1..lines.len() - 1 {
+        for j in 1..lines.len() - 1 {
+            if &lines[i][j..j + 1] == "A" {
+                let (u, d, l, r) = (
+                    &lines[i - 1][j - 1..j],
+                    &lines[i + 1][j + 1..j + 2],
+                    &lines[i - 1][j + 1..j + 2],
+                    &lines[i + 1][j - 1..j],
+                );
 
-                if is_cross_match(u,d,l,r) {
+                if is_cross_match(u, d, l, r) {
                     sum += 1;
-                } 
+                }
             }
         }
     }
@@ -45,7 +50,8 @@ fn part2(lines: &Vec<String>) {
 }
 
 fn is_cross_match(u: &str, d: &str, l: &str, r: &str) -> bool {
-    return ((u,d) == ("M","S") || (u,d) == ("S","M")) && ((l,r) == ("M","S") || (l,r) == ("S","M")); 
+    return ((u, d) == ("M", "S") || (u, d) == ("S", "M"))
+        && ((l, r) == ("M", "S") || (l, r) == ("S", "M"));
 }
 
 fn rotate_45(lines: &Vec<String>) -> Vec<String> {
@@ -84,8 +90,8 @@ fn rotate_neg_45(lines: &Vec<String>) -> Vec<String> {
             fwd.push_str(&lines[j][lines.len() - 1 - i + j..lines.len() - i + j]);
             rev.push_str(&lines[lines.len() - 1 - i + j][j..j + 1]);
         }
-                out_vec.push(fwd);
-                out_vec.push(rev);
+        out_vec.push(fwd);
+        out_vec.push(rev);
     }
 
     if lines.len() % 2 == 0 {

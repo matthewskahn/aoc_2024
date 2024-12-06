@@ -13,8 +13,17 @@ pub fn read_file(path: &str) -> Vec<String> {
         .collect()
 }
 
-pub fn read_file_as<T: FromStr,>(path: &str) -> Vec<Vec<T>>
-    where <T as FromStr>::Err: Debug {
+pub fn read_file_as_chars(path: &str) -> Vec<Vec<char>> {
+    read_file(path)
+        .iter()
+        .map(|x| x.chars().collect())
+        .collect()
+}
+
+pub fn read_file_as<T: FromStr>(path: &str) -> Vec<Vec<T>>
+where
+    <T as FromStr>::Err: Debug,
+{
     let lines_as_strings = read_file(path);
     let mut lines_as_t: Vec<Vec<T>> = Vec::new();
 

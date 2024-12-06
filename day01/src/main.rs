@@ -7,8 +7,8 @@ fn main() {
 }
 
 fn part1() {
-    let lines = read_file("/home/matt/dev/aoc/2024/day01/input.txt");
-    
+    let lines = read_file("./input.txt");
+
     let mut first_list: Vec<i32> = Vec::new();
     let mut second_list: Vec<i32> = Vec::new();
 
@@ -31,7 +31,7 @@ fn part1() {
 
 fn part2() {
     let lines = read_file("/home/matt/dev/aoc/2024/day01/input.txt");
-    
+
     let mut first_list: Vec<u32> = Vec::new();
     let mut second_list: Vec<u32> = Vec::new();
 
@@ -44,7 +44,13 @@ fn part2() {
     let mut sum: u32 = 0;
 
     for num in first_list {
-        let hist: u32 = second_list.iter().map(|&elem| match num == elem {true => 1, _ => 0}).sum();
+        let hist: u32 = second_list
+            .iter()
+            .map(|&elem| match num == elem {
+                true => 1,
+                _ => 0,
+            })
+            .sum();
         sum += num * hist;
     }
 
