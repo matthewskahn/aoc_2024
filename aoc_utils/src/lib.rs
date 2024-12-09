@@ -20,6 +20,13 @@ pub fn read_file_as_chars(path: &str) -> Vec<Vec<char>> {
         .collect()
 }
 
+pub fn read_file_as_i(path: &str) -> Vec<isize> {
+    read_file(path)[0]
+        .chars()
+        .map(|x| x.to_digit(10).unwrap() as isize)
+        .collect()
+}
+
 pub fn read_file_as<T: FromStr>(path: &str) -> Vec<Vec<T>>
 where
     <T as FromStr>::Err: Debug,
