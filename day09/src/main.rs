@@ -1,7 +1,7 @@
-use aoc_utils::read_file_as_i;
+use aoc_utils::read_file_as_line_of_i;
 
 fn main() {
-    let lines = &read_file_as_i("./input.txt");
+    let lines = &read_file_as_line_of_i("./input.txt");
 
     part1(lines);
     part2(lines);

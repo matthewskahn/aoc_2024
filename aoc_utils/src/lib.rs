@@ -20,7 +20,14 @@ pub fn read_file_as_chars(path: &str) -> Vec<Vec<char>> {
         .collect()
 }
 
-pub fn read_file_as_i(path: &str) -> Vec<isize> {
+pub fn read_file_as_u8(path: &str) -> Vec<Vec<u8>> {
+    read_file(path)
+        .iter()
+        .map(|x| x.chars().map(|x| x as u8 - 48).collect())
+        .collect()
+}
+
+pub fn read_file_as_line_of_i(path: &str) -> Vec<isize> {
     read_file(path)[0]
         .chars()
         .map(|x| x.to_digit(10).unwrap() as isize)
