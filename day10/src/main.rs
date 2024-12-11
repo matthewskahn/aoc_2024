@@ -18,7 +18,11 @@ fn part1(input: &Vec<Vec<u8>>) {
             if input[i as usize][j as usize] == 0 {
                 let mut paths: HashSet<Vec<Position>> = HashSet::new();
                 find_path(&input, (i, j), 0, vec![(i, j)], &mut paths);
-                distinct_endpoints += paths.iter().map(|path| path.last().unwrap()).collect::<HashSet<&Position>>().len();
+                distinct_endpoints += paths
+                    .iter()
+                    .map(|path| path.last().unwrap())
+                    .collect::<HashSet<&Position>>()
+                    .len();
             }
         }
     }
@@ -31,7 +35,7 @@ fn part2(input: &Vec<Vec<u8>>) {
     for i in 0..input.len() as isize {
         for j in 0..input[i as usize].len() as isize {
             if input[i as usize][j as usize] == 0 {
-                find_path(&input, (i, j), 0, vec![(i,j)], &mut paths);
+                find_path(&input, (i, j), 0, vec![(i, j)], &mut paths);
             }
         }
     }
@@ -39,11 +43,21 @@ fn part2(input: &Vec<Vec<u8>>) {
     println!("Part 2: {}", paths.len());
 }
 
-fn find_path(input: &Vec<Vec<u8>>, start: Position, elevation: u8, path_so_far: Vec<Position>, paths: &mut HashSet<Vec<Position>>) {
-
+fn find_path(
+    input: &Vec<Vec<u8>>,
+    start: Position,
+    elevation: u8,
+    path_so_far: Vec<Position>,
+    paths: &mut HashSet<Vec<Position>>,
+) {
     for next in vec![(0, 1), (1, 0), (-1, 0), (0, -1)] {
         let next_move = (start.0 + next.0, start.1 + next.1);
-        if next_move.0 < input.len() as isize && next_move.0 >= 0 && next_move.1 < input.len() as isize && next_move.1 >= 0 && input[next_move.0 as usize][next_move.1 as usize] == elevation + 1 {
+        if next_move.0 < input.len() as isize
+            && next_move.0 >= 0
+            && next_move.1 < input.len() as isize
+            && next_move.1 >= 0
+            && input[next_move.0 as usize][next_move.1 as usize] == elevation + 1
+        {
             let mut new_path = path_so_far.clone();
             new_path.push(next_move);
             if input[next_move.0 as usize][next_move.1 as usize] == 9 {
