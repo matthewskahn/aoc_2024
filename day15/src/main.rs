@@ -1,6 +1,6 @@
 use aoc_utils::read_file_as_chars;
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 struct Position {
     x: usize,
     y: usize,
@@ -13,7 +13,7 @@ struct Move {
 }
 
 fn main() {
-    let lines = read_file_as_chars("sample.txt");
+    let lines = read_file_as_chars("input.txt");
 
     let mut board: Vec<Vec<char>> = Vec::new();
     let mut moves: Vec<char> = Vec::new();
@@ -44,7 +44,6 @@ fn part1(board: &mut Vec<Vec<char>>, moves: Vec<char>, start_point: Position) {
     let mut pos = start_point;
 
     for mv in moves {
-        println!("Move: {}", mv);
         match mv {
             '^' => {
                 pos = do_move(board, pos, Move { x: 0, y: -1 });
@@ -61,62 +60,66 @@ fn part1(board: &mut Vec<Vec<char>>, moves: Vec<char>, start_point: Position) {
             _ => panic!("Invalid move"),
         }
     }
+
+    let mut accum = 0;
+    for y in 0..board.len() {
+        for j in 0..board[y].len() {
+            if board[y][j] == 'O' {
+                accum += y * 100 + j;
+            }
+        }
+    }
+
+    println!("Part 1: {}", accum);
 }
 
 fn do_move(board: &mut Vec<Vec<char>>, pos: Position, mv: Move) -> Position {
-    let mut adjacent: Vec<char> = Vec::new();
+    let mut search_pt = Position { x: pos.x, y: pos.y };
+    let mut new_pos = Position { x: pos.x, y: pos.y };
 
-    println!("Pos: {:?}, Mv: {:?}", pos, mv);
+    search_pt.x = search_pt.x.checked_add_signed(mv.x).unwrap();
+    search_pt.y = search_pt.y.checked_add_signed(mv.y).unwrap();
 
-    let mut search_pt = Position {
-        x: pos.x,
-        y: pos.y,
-    };
-    let mut new_pos = Position{ x: pos.x, y: pos.y};
-
-    let mut found_barrel = false;
-    while board[search_pt.y.checked_add_signed(mv.y).unwrap()][search_pt.x.checked_add_signed(mv.x).unwrap()] != '#' {
-        if board[search_pt.y.checked_add_signed(mv.y).unwrap()][search_pt.x.checked_add_signed(mv.x).unwrap()] == 'O' {
-            if found_barrel { break; } else { found_barrel = true;}
-        }
-        adjacent.push(board[search_pt.y][search_pt.x]);
-        search_pt.x = search_pt.x.checked_add_signed(mv.x).unwrap();
-        search_pt.y = search_pt.y.checked_add_signed(mv.y).unwrap();
-    }
-
-    println!("Moved {} spaces.", adjacent.len());
-
-    if adjacent.len() > 0 {
-        let barrels = adjacent.iter().filter(|c| **c == 'O').count();
-        println!("Found {} barrels", barrels);
-
-        for _ in 0..barrels {
-            board[search_pt.y][search_pt.x] = 'O';
-            search_pt.x = search_pt.x.checked_add_signed(-mv.x).unwrap();
-            search_pt.y = search_pt.y.checked_add_signed(-mv.y).unwrap();
-        }
-        board[search_pt.y][search_pt.x] = '@';
-        new_pos = Position {
-            x: search_pt.x,
-            y: search_pt.y,
-        };
-
-        for _ in 0..adjacent.len() - barrels - 1 {
-            board[search_pt.y - 1][search_pt.x - 1] = '.';
-            search_pt.x = search_pt.x.checked_add_signed(-mv.x).unwrap();
-            search_pt.y = search_pt.y.checked_add_signed(-mv.y).unwrap();
-        }
-    }
-
-    if new_pos.x != pos.x && pos.y != new_pos.y {
+    if board[search_pt.y][search_pt.x] == '.' {
         board[pos.y][pos.x] = '.';
-    }
-    print_board(board);
-    new_pos
-}
+        board[search_pt.y][search_pt.x] = '@';
+        new_pos = search_pt;
+    } else if board[search_pt.y][search_pt.x] == '#' {
+        // Do nothing
+    } else {
+        let mut barrels: Vec<Position> = vec![search_pt];
+        let mut hit_wall = false;
 
-fn print_board(board: &Vec<Vec<char>>) {
-    for line in board {
-        println!("{}", line.iter().collect::<String>());
+        loop {
+            search_pt.x = search_pt.x.checked_add_signed(mv.x).unwrap();
+            search_pt.y = search_pt.y.checked_add_signed(mv.y).unwrap();
+
+            if board[search_pt.y][search_pt.x] == 'O' {
+                barrels.push(search_pt);
+            } else if board[search_pt.y][search_pt.x] == '#' {
+                hit_wall = true;
+                break;
+            } else {
+                break;
+            }
+        }
+
+        // println!("{:?}", barrels);
+
+        if !hit_wall {
+            barrels.reverse();
+            for barrel in barrels {
+                board[barrel.y.checked_add_signed(mv.y).unwrap()]
+                    [barrel.x.checked_add_signed(mv.x).unwrap()] = 'O';
+            }
+            board[new_pos.y.checked_add_signed(mv.y).unwrap()]
+                [new_pos.x.checked_add_signed(mv.x).unwrap()] = '@';
+            board[new_pos.y][new_pos.x] = '.';
+            new_pos = Position {
+                x: new_pos.x.checked_add_signed(mv.x).unwrap(),
+                y: new_pos.y.checked_add_signed(mv.y).unwrap(),
+            };
+        }
     }
+    new_pos
 }
