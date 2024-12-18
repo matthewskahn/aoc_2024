@@ -104,8 +104,6 @@ fn do_move(board: &mut Vec<Vec<char>>, pos: Position, mv: Move) -> Position {
             }
         }
 
-        // println!("{:?}", barrels);
-
         if !hit_wall {
             barrels.reverse();
             for barrel in barrels {
